@@ -4,9 +4,6 @@ const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
-const fs = require("fs");
-
-const outputPath = path.resolve(__dirname, "output", "team.html");
 
 const render = require("./lib/htmlRenderer");
 
@@ -19,6 +16,10 @@ let status = ""
 
 inquirer
     .prompt([
+        {
+            message: "Welcome!  What would you like to name your team?",
+            name: "teamname"
+        },
         {
             message: "What's the Unit Manager's name?",
             name: "managername"
@@ -42,7 +43,7 @@ inquirer
             choices: ["Engineer", "Intern", "I don't want to add anyone else."]
         },
     ]).then(function (response) {
-        const newManager = new Manager(response.managername, response.managerid, response.manageremail, response.manageroffnum)
+        const newManager = new Manager(response.managername, response.managerid, response.manageremail, response.manageroffnum, response.teamname)
         employees.push(newManager);
         status = response.doNext
         checkStatus()
