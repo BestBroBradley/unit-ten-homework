@@ -1,4 +1,5 @@
 // Keep these lines; they're important!
+const Team = require("./lib/Team")
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
@@ -14,40 +15,18 @@ let status = ""
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
-inquirer
-    .prompt([
+function initialize() {
+    inquirer.prompt([
         {
             message: "Welcome!  What would you like to name your team?",
             name: "teamname"
-        },
-        {
-            message: "What's the Unit Manager's name?",
-            name: "managername"
-        },
-        {
-            message: "What's the manager's ID?",
-            name: "managerid"
-        },
-        {
-            message: "What's the manager's email?",
-            name: "manageremail"
-        },
-        {
-            message: "What's the manager's office number?",
-            name: "manageroffnum"
-        },
-        {
-            message: "What type of team member would you like to add?",
-            name: "doNext",
-            type: "list",
-            choices: ["Engineer", "Intern", "I don't want to add anyone else."]
-        },
-    ]).then(function (response) {
-        const newManager = new Manager(response.managername, response.managerid, response.manageremail, response.manageroffnum, response.teamname)
-        employees.push(newManager);
-        status = response.doNext
-        checkStatus()
-    })
+        }
+    ])
+        .then(function (response) {
+            employees.push(new Team(response.teamname))
+            askManager()
+        })
+}
 
 function checkStatus() {
     if (status === "Engineer") {
@@ -58,6 +37,38 @@ function checkStatus() {
         render(employees)
         return;
     }
+}
+
+function askManager() {
+    inquirer
+        .prompt([
+            {
+                message: "What's the Unit Manager's name?",
+                name: "managername"
+            },
+            {
+                message: "What's the manager's ID?",
+                name: "managerid"
+            },
+            {
+                message: "What's the manager's email?",
+                name: "manageremail"
+            },
+            {
+                message: "What's the manager's office number?",
+                name: "manageroffnum"
+            },
+            {
+                message: "What type of team member would you like to add?",
+                name: "doNext",
+                type: "list",
+                choices: ["Engineer", "Intern", "I don't want to add anyone else."]
+            },
+        ]).then(function (response) {
+            employees.push(new Manager(response.managername, response.managerid, response.manageremail, response.manageroffnum));
+            status = response.doNext
+            checkStatus()
+        })
 }
 
 function askIntern() {
@@ -122,6 +133,7 @@ function askEngineer() {
     })
 }
 
+initialize()
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -140,4 +152,3 @@ function askEngineer() {
 // for further information. Be sure to test out each class and verify it generates an 
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work!
-
