@@ -24,5 +24,3 @@ In the command line, the user will input their manager's information, then selec
 
 Generated HTML page:
 ![Generated HTML page](assets/output.png)
-
-#Third-party items used:
